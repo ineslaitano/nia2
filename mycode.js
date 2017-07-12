@@ -1,3 +1,6 @@
+var arrMedias=[];
+var arrMedStr=[];
+
 $(document).ready(function() {
 	// options = {
 	// delimiter: config.delimiter,
@@ -15,60 +18,71 @@ $(document).ready(function() {
 	// };
 	
 	$.ajax({
-	type: "GET",
 	url: "nia_structures_famille_utf8.csv",
 	dataType: "text",
-		success: function(input) {
+	success: function(input) {
 		var options = {
 			start: 2 //ne prend pas en compte les entetes
-		};
+			};
 		var data = $.csv.toArrays(input, options);
 		generateFamilles(data);
 		}
 	});
 	
 	$.ajax({
-	type: "GET",
 	url: "nia_structures_structure_utf8.csv",
 	dataType: "text",
 	success: function(input) {
 		var options = {
 			separator:';',
 			start: 2 //ne prend pas en compte les entetes
-		};
+			};
 		var data = $.csv.toArrays(input, options);
 		generateStructures(data);
-	}
+		}
 	});
 	
 	$.ajax({
-	type: "GET",
 	url: "chant1_media_utf8.prn",
 	dataType: "text",
 	success: function(input) {
 		var options = {
 			separator:' ',
 			start: 2 //ne prend pas en compte les entetes
-		};
-		var data = $.csv.toArrays(input, options);
-		generateMedias(data);
-	}
+			};
+		arrMedias = $.csv.toArrays(input, options);
+		}
+	});
+	
+	$.ajax({
+	url: "chant1_media_ds_structure_utf8.prn",
+	dataType: "text",
+	success: function(input) {
+		var options = {
+			separator:' ',
+			start: 2 //ne prend pas en compte les entetes
+			};
+		arrMedStr = $.csv.toArrays(input, options);
+		generateNIA();
+		}
 	});
 });
 
+$(document).change(function() {
+    generateNIA();
+});
+ 
 function generateFamilles(data) {
-	$(document.body).empty();
-	var html = '<ul>';
+	var html = '';
 	for(var row in data) {
 		html += '<li>' + data[row][1] + '</li>\r\n<ul id="famille' + data[row][0] + '"></ul>';
 	}
-	html += '</ul>';
-	$(document.body).html(html);
+	$('#menu').append(html);
 }
 
 function generateStructures(data) {
 	for(var row in data) {
-		$('#famille' + data[row][1]).append( '<li><input type="checkbox">' + data[row][2] + '</li>\r\n');
+		$('#famille' + data[row][1]).append( '<li><input type="checkbox" value="' + data[row][0] + '">' + data[row][2] + '</li>\r\n');
 		// //si el id_parent está vacío, se agrega a su familia. 
 		// if(data[row][3] =='') {
 			// $('#famille' + data[row][1]).append( '<li>' + data[row][2] + '</li>\r\n<ul id="structure' + data[row][0] + '"></ul>');
@@ -80,24 +94,46 @@ function generateStructures(data) {
 	}
 }
 
-function generateMedias(data) {
-	var html = '<p> ';
+function generateNIA() {
+	$('#nia').empty();
+	var html = '';
 	var ligne = 0;
-	for(var row in data) {
-		if(data[row][4] < 1000) {
-			if(data[row][3] == ligne) {
-				html += data[row][1] + ' ';
+	for(var row in arrMedias) {
+		var balisesFermantes = '';
+		//le media est il dans une structure ?
+		if ($('input:checked').length > 0){
+			for (var i = 0; i < $('input:checked').length; i++) {
+				//recherche dans media_ds_structure
+				for( var j = 0; j < arrMedStr.length; j++ ) {
+					if( arrMedStr[j][0] == arrMedias[row][0] && arrMedStr[j][1] == $('input:checked')[i].value) {
+						html += '<mark class="couleur' + arrMedStr[j][1] + '">';
+						balisesFermantes += '</mark>';
+						if (arrMedStr[j][2] == 'true'){
+							html += '<strong>';
+							balisesFermantes += '</strong>';
+						}
+						break;
+					}
+				}
+			}
+		}
+		
+		if(arrMedias[row][4] < 1000) {
+			if(arrMedias[row][3] == ligne) {
+				html += arrMedias[row][1] + ' ';
 			}
 			else
 			{
-				html += '<br/>' + data[row][1] + ' ';
-				ligne = data[row][3];
+				html += '<br/>' + arrMedias[row][1] + ' ';
+				ligne = arrMedias[row][3];
 			}
 		}	
 		else
-		{//traitement des images
+		{
+			//traitement des images
 		}
+		
+		html += balisesFermantes;
 	}
-	$(document.body).append(html + '</p>');
+	$('#nia').append(html);
 }
-
