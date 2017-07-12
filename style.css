@@ -1,0 +1,15 @@
+body
+{
+	display:flex;
+	font-family: Verdana;
+}
+ul
+{
+	list-style-type: none;
+	margin-bottom: 1em;
+}
+p
+{
+	margin-left: 5em;
+	font-family: Geneva;
+}
