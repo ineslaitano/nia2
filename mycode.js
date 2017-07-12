@@ -82,7 +82,7 @@ function generateFamilles(data) {
 
 function generateStructures(data) {
 	for(var row in data) {
-		$('#famille' + data[row][1]).append( '<li><input type="checkbox" value="' + data[row][0] + '">' + data[row][2] + '</li>\r\n');
+		$('#famille' + data[row][1]).append( '<li class="couleur' + data[row][0] + '"><input type="checkbox" value="' + data[row][0] + '">' + data[row][2] + '</li>\r\n');
 		// //si el id_parent está vacío, se agrega a su familia. 
 		// if(data[row][3] =='') {
 			// $('#famille' + data[row][1]).append( '<li>' + data[row][2] + '</li>\r\n<ul id="structure' + data[row][0] + '"></ul>');

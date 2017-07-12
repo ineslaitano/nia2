@@ -1,27 +1,28 @@
-body
-{
-	display:flex;
-	font-family: Verdana;
-}
 ul
 {
 	list-style-type: none;
-	margin-bottom: 1em;
+	margin-bottom: 0.8em;
 }
-p
+#menu
 {
-	margin-left: 5em;
+	font-family: Verdana;
+	font-size: 0.8em;
+	position: fixed;
+}
+#nia
+{
 	font-family: Geneva;
+	margin-left: 25%;
 }
 .couleur13
 {
-	background-color: yellow;
+	background-color: #f77a65;
 }
 .couleur14
 {
-	background-color: pink;
+	background-color: #ffa426;
 }
 .couleur15
 {
-	background-color: aqua;
+	background-color: #f4ee42;
 }
