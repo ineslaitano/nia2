@@ -75,7 +75,7 @@ $(document).change(function() {
 function generateFamilles(data) {
 	var html = '';
 	for(var row in data) {
-		html += '<li>' + data[row][1] + '</li>\r\n<ul id="famille' + data[row][0] + '"></ul>';
+		html += '<li>' + data[row][1] + '<ul id="famille' + data[row][0] + '"></ul></li>';
 	}
 	$('#menu').append(html);
 }
